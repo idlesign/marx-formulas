@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Интерактивная лаборатория формул трудовой теории стоимости Маркса и Энгельса. Локальные расчёты, сценарии и каталог обследованного корпуса.">
+  <title>Формулы трудовой теории стоимости</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23213f91'/%3E%3Ctext x='32' y='45' text-anchor='middle' font-size='46' fill='white' font-family='serif'%3Eλ%3C/text%3E%3C/svg%3E">
+  <link rel="stylesheet" href="vendor/katex/katex.min.css">
+  <link rel="stylesheet" href="styles.css">
+  <script defer src="vendor/katex/katex.min.js"></script>
+  <script defer src="vendor/katex/contrib/auto-render.min.js"></script>
+  <script defer src="vendor/marked/marked.umd.js"></script>
+  <script defer src="vendor/dompurify/purify.min.js"></script>
+  <script defer src="catalog.js"></script>
+  <script defer src="models-foundations.js"></script>
+  <script defer src="models-advanced.js"></script>
+  <script defer src="models-audit.js"></script>
+  <script defer src="models-grundrisse.js"></script>
+  <script defer src="app.js"></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">К содержимому</a>
+  <div class="mobile-bar"><button id="menu-toggle" class="icon-button" aria-label="Открыть список тем" aria-expanded="false">☰</button><strong>Формулы стоимости</strong><span class="local-dot" title="Работает локально"></span></div>
+  <button class="nav-overlay" id="nav-overlay" aria-label="Закрыть список тем" hidden></button>
+  <aside class="sidebar" id="sidebar" aria-label="Навигация по темам">
+    <a class="brand" href="#" id="brand">Формулы стоимости</a>
+    <nav class="view-switch" aria-label="Режим работы"><button id="lab-tab" class="active" aria-pressed="true">Расчёты</button><button id="catalog-tab" aria-pressed="false">Каталог</button></nav>
+    <div class="nav-label">Темы</div>
+    <nav id="group-nav" class="group-nav" aria-label="Темы формул"></nav>
+    <div class="side-footer"><button id="about-button" class="text-button">О моделях и источниках ↗</button><p><span class="local-dot"></span> Без отправки данных<br><small>Расчёты выполняются в вашем браузере</small></p></div>
+  </aside>
+  <main id="main" tabindex="-1">
+    <header class="masthead"><h1>Формулы трудовой теории стоимости</h1></header>
+    <section id="lab-view" aria-label="Интерактивная лаборатория">
+      <div class="section-heading"><div><span class="eyebrow" id="group-number"></span><h2 id="group-title"></h2></div></div>
+      <nav id="model-tabs" class="model-tabs" aria-label="Расчёты в этой теме"></nav>
+      <label class="mobile-model-selector">Расчёт<select id="model-picker"></select></label>
+      <div class="experiment-heading"><div><h3 id="model-title"></h3><p id="model-description"></p></div><button class="quiet-button" id="share-button" title="Копировать ссылку с текущими значениями">Ссылка на сценарий ↗</button></div>
+      <div id="formula-banner" class="formula-banner" aria-label="Связанные формулы"></div>
+      <div class="lab-grid">
+        <section class="inputs-panel panel" aria-label="Исходные величины">
+          <div class="panel-heading"><h3>Исходные величины</h3></div>
+          <label class="preset-label" for="presets">Начать с примера</label><select id="presets" class="full-select"></select>
+          <p class="input-help">Поля и ползунки связаны. Десятичную часть можно вводить через точку или запятую.</p>
+          <div id="fields"></div>
+          <div class="baseline-controls"><button id="pin-baseline" class="primary-button">Сделать исходным</button><button id="restore-baseline" class="quiet-button">Вернуть исходные</button><button id="reset-model" class="text-button">Сбросить опыт</button></div>
+          <p class="baseline-hint">Сравнение — с исходным сценарием этого опыта. Кнопка «Сделать исходным» запоминает текущие числа.</p>
+        </section>
+        <div class="results-column">
+          <div id="validation" role="status" aria-live="polite"></div>
+          <section class="results-panel panel" aria-label="Результаты"><div class="panel-heading"><h3>Результаты</h3><span class="comparison-key">Исходное → текущее</span></div><div id="metrics" class="metrics"></div><div id="bars"></div><div id="flow" class="flow"></div><div id="result-table" class="table-wrap"></div></section>
+          <section class="chart-panel panel" aria-label="График зависимости"><div class="panel-heading"><h3>Зависимость результата</h3><span class="chart-badge">Остальные — фиксированы</span></div><div class="chart-controls"><label>Меняем<select id="chart-x"></select></label><span class="chart-arrow" aria-hidden="true">→</span><label>Наблюдаем<select id="chart-y"></select></label></div><div class="chart-legend"><span><i class="legend-line"></i>Текущий сценарий</span><span><i class="legend-line dashed"></i>Исходный сценарий</span></div><div id="chart"></div><p id="chart-caption" class="chart-caption"></p><details class="chart-data"><summary>Значения графика в таблице</summary><div id="chart-table" class="table-wrap"></div></details></section>
+          <section class="assumptions panel"><h3>Условия применимости</h3><ul id="model-notes"></ul></section>
+        </div>
+      </div>
+      <section class="sources-section"><div class="section-heading"><div><h2>Формулы этого опыта</h2></div><button id="group-catalog" class="quiet-button">Весь раздел каталога →</button></div><p class="section-description">Нажмите на карточку, чтобы открыть определение переменных, варианты в разных работах, источники и математические оговорки.</p><div id="model-sources" class="source-grid"></div></section>
+    </section>
+    <section id="catalog-view" hidden aria-label="Полный каталог формул"><div class="section-heading"><div><h2>Каталог формул</h2></div><button id="download-catalog" class="quiet-button">Скачать каталог Markdown ↓</button></div><p class="section-description">Тексты формул, обозначения, варианты в разных работах и математические оговорки. Сверка с MEGA частичная; точный статус указан в источниках. «Есть расчёт» — формула используется в калькуляторе, «Связанный разбор» — доступен только текст. E0–E5 — оценка математической части наиболее проблемного приведённого варианта, не всей теории и не обязательно авторской формулы. Рядом с оценкой указано, кому относится спорная запись; перед формулой — показан ли ошибочный вариант или его исправление.</p><button id="assessment-help" class="text-button">Что означает шкала E0–E5?</button><div class="catalog-controls"><label class="search-label"><span class="sr-only">Поиск в каталоге</span><input id="catalog-search" type="search" placeholder="Формула, переменная, работа или F034…" autocomplete="off"></label><label><span class="sr-only">Тема каталога</span><select id="catalog-group"><option value="all">Все темы</option></select></label><label><span class="sr-only">Сомнительность математической части</span><select id="catalog-assessment"><option value="all">Все оценки E</option><option value="0">E0 · проблем не выявлено</option><option value="1">E1 · точность и обозначения</option><option value="2">E2 · неоднозначность</option><option value="3">E3 · неполнота</option><option value="4">E4 · условная несовместимость</option><option value="5">E5 · конкретная ошибка</option></select></label><label><span class="sr-only">Порядок формул</span><select id="catalog-order"><option value="source">По порядку каталога</option><option value="rating">Сначала E5</option></select></label></div><div class="catalog-toolbar"><div class="catalog-kind"><button class="active" id="formulas-kind" aria-pressed="true">Формулы</button><button id="translations-kind" aria-pressed="false">Оригинал и перевод</button></div><span id="catalog-count" role="status"></span></div><div id="catalog-list" class="catalog-grid"></div></section>
+    <footer class="main-footer"><button id="footer-about" class="text-button">Метод и границы полноты</button></footer>
+  </main>
+  <dialog id="reader-dialog" class="reader-dialog" aria-labelledby="reader-title"><header class="reader-heading"><div><span id="reader-code" class="eyebrow"></span><h2 id="reader-title"></h2></div><button id="reader-close" class="icon-button" aria-label="Закрыть текст">×</button></header><div id="reader-actions" class="reader-actions"></div><article id="reader-content" class="prose"></article></dialog>
+  <div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
+  <noscript><div class="no-script">Для расчётов и просмотра каталога включите JavaScript. Исходный исследовательский текст хранится отдельно от стенда.</div></noscript>
+</body>
+</html>
